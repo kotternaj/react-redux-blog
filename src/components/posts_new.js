@@ -7,13 +7,18 @@ class PostsNew extends  Component {
             <div className='form-group'>
                 <label>{ field.label }</label>
                 <input className = 'form-control' type='text' {...field.input} />
+                {field.meta.error}
             </div>
         );
     }
-
+    
+    onSubmit(values){
+        console.log(values)
+    }
     render() {
+        const { handleSubmit } = this.props
         return (
-            <form>
+            <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                 <Field
                 label='Title for Post'
                 name='title'
@@ -29,21 +34,20 @@ class PostsNew extends  Component {
                 name='content'
                 component={this.renderField}
                 />
+
+                <button type='submit' className='btn btn-primary'>Submit</button>
             </form>
         );
     }
 
 }
 
-function validate(){    
+function validate(values){    
     const errors = {};
 
-    if (!values.title) { // if no title is not entered or invalid
+    if (!values.title) { 
       errors.title = 'Enter a title!';
-    }
-    if (values.title.length < 3) {  // another example 
-        errors.title = 'Title must be more than 3 characters';
-    }
+    }    
     if (!values.categories) {
         errors.categories = 'Enter some categories!';
     }
@@ -60,5 +64,5 @@ function validate(){
 
 export default reduxForm({
     validate, 
-    form: 'PostNewForm'
+    form: 'PostsNewForm'
 })(PostsNew);
